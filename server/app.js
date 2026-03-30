@@ -16,6 +16,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
 });
 
+app.use('/api/auth', require('./routes/auth.routes'));
+
 app.use(errorMiddleware);
 
 module.exports = app;
