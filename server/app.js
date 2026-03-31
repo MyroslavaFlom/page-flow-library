@@ -2,6 +2,12 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const jwt = require('jsonwebtoken');
+const { typeDefs } = require('./graphql/schema');
+const resolvers = require('./graphql/index');
+const jwtConfig = require('./config/jwt');
 const errorMiddleware = require('./middleware/error.middleware');
 
 const app = express();
@@ -23,4 +29,30 @@ app.use('/api/categories', require('./routes/categories.routes'));
 
 app.use(errorMiddleware);
 
-module.exports = app;
+async function startApollo(app) {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+
+  await server.start();
+
+  app.use(
+    '/graphql',
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) return { user: null };
+        try {
+          const decoded = jwt.verify(token, jwtConfig.secret);
+          return { user: decoded };
+        } catch {
+          return { user: null };
+        }
+      },
+    })
+  );
+}
+
+module.exports = { app, startApollo };
