@@ -4,6 +4,10 @@
 
     <SearchFilter v-model="filters" class="mb-6" />
 
+    <div v-if="booksStore.lastUpdated" class="text-xs text-gray-400 text-right mb-2">
+      Оновлено: {{ booksStore.lastUpdated }}
+    </div>
+
     <div v-if="booksStore.loading" class="text-center py-12 text-gray-400">
       Завантаження...
     </div>
@@ -26,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useBooksStore } from '@/stores/books.store'
 import BookCard from '@/components/BookCard.vue'
 import SearchFilter from '@/components/SearchFilter.vue'
@@ -52,5 +56,12 @@ watch(filters, () => {
 
 watch(currentPage, loadBooks)
 
-onMounted(loadBooks)
+onMounted(() => {
+  loadBooks()
+  booksStore.startPolling(10000)
+})
+
+onUnmounted(() => {
+  booksStore.stopPolling()
+})
 </script>
