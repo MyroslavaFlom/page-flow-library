@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const {
+  getAuthors, getAuthor, createAuthor, updateAuthor, deleteAuthor, toggleAuthor
+} = require('../controllers/authors.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+const adminMiddleware = require('../middleware/admin.middleware');
+
+router.get('/', getAuthors);
+router.get('/:id', getAuthor);
+router.post('/', authMiddleware, adminMiddleware, createAuthor);
+router.put('/:id', authMiddleware, adminMiddleware, updateAuthor);
+router.delete('/:id', authMiddleware, adminMiddleware, deleteAuthor);
+router.patch('/:id/toggle', authMiddleware, adminMiddleware, toggleAuthor);
+
+module.exports = router;

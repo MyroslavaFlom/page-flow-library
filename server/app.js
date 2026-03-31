@@ -17,6 +17,9 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/books', require('./routes/books.routes'));
+app.use('/api/authors', require('./routes/authors.routes'));
+app.use('/api/categories', require('./routes/categories.routes'));
 
 app.use(errorMiddleware);
 
