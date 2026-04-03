@@ -1,50 +1,72 @@
 <template>
   <div>
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Управління книгами</h1>
-      <button @click="openForm(null)"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+      <h1 style="font-size: 1.8rem; color: var(--text-primary);">Управління книгами</h1>
+      <button @click="openForm(null)" style="
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      "
+      @mouseover="e => e.target.style.background = 'var(--accent-hover)'"
+      @mouseleave="e => e.target.style.background = 'var(--accent)'">
         + Додати книгу
       </button>
     </div>
 
-    <div class="flex gap-4 mb-6 border-b pb-3">
-      <RouterLink to="/admin/books" class="text-blue-600 font-medium">Книги</RouterLink>
-      <RouterLink to="/admin/authors" class="text-gray-500 hover:text-blue-600">Автори</RouterLink>
-      <RouterLink to="/admin/categories" class="text-gray-500 hover:text-blue-600">Категорії</RouterLink>
+    <!-- Навігація -->
+    <div style="display: flex; gap: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+      <RouterLink to="/admin/books" style="color: var(--accent-hover); border-bottom: 2px solid var(--accent); padding-bottom: 12px; font-size: 0.95rem;">Книги</RouterLink>
+      <RouterLink to="/admin/authors" style="color: var(--text-muted); font-size: 0.95rem;">Автори</RouterLink>
+      <RouterLink to="/admin/categories" style="color: var(--text-muted); font-size: 0.95rem;">Категорії</RouterLink>
     </div>
 
-    <div class="bg-white rounded-xl shadow overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-gray-50 border-b">
-          <tr>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Назва</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Автор</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Категорія</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Статус</th>
-            <th class="text-left px-4 py-3 text-sm font-medium text-gray-600">Дії</th>
+    <div style="
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+    ">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="background: var(--bg-elevated);">
+            <th style="text-left: left; padding: 12px 16px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; text-align: left;">Назва</th>
+            <th style="padding: 12px 16px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; text-align: left;">Автор</th>
+            <th style="padding: 12px 16px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; text-align: left;">Категорія</th>
+            <th style="padding: 12px 16px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; text-align: left;">Статус</th>
+            <th style="padding: 12px 16px; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 500; text-align: left;">Дії</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="book in books" :key="book._id" class="border-b hover:bg-gray-50">
-            <td class="px-4 py-3 font-medium">{{ book.title }}</td>
-            <td class="px-4 py-3 text-gray-600">
+          <tr v-for="book in books" :key="book._id"
+            style="border-bottom: 1px solid var(--border-subtle); transition: background 0.15s;"
+            @mouseover="e => e.currentTarget.style.background = 'var(--bg-elevated)'"
+            @mouseleave="e => e.currentTarget.style.background = 'transparent'">
+            <td style="padding: 14px 16px; color: var(--text-primary); font-weight: 500;">{{ book.title }}</td>
+            <td style="padding: 14px 16px; color: var(--text-secondary);">
               {{ book.author?.firstName }} {{ book.author?.lastName }}
             </td>
-            <td class="px-4 py-3 text-gray-600">{{ book.category?.name }}</td>
-            <td class="px-4 py-3">
-              <span :class="book.isActive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'"
-                class="px-2 py-0.5 rounded-full text-xs">
+            <td style="padding: 14px 16px; color: var(--text-secondary);">{{ book.category?.name }}</td>
+            <td style="padding: 14px 16px;">
+              <span :style="book.isActive
+                ? 'background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3);'
+                : 'background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3);'"
+                style="padding: 3px 10px; border-radius: 6px; font-size: 0.75rem;">
                 {{ book.isActive ? 'Активна' : 'Неактивна' }}
               </span>
             </td>
-            <td class="px-4 py-3">
-              <div class="flex gap-2">
-                <button @click="openForm(book)" class="text-blue-600 hover:text-blue-800 text-sm">Редагувати</button>
-                <button @click="handleToggle(book)" class="text-yellow-600 hover:text-yellow-800 text-sm">
+            <td style="padding: 14px 16px;">
+              <div style="display: flex; gap: 12px;">
+                <button @click="openForm(book)" style="background: none; border: none; color: var(--accent-hover); cursor: pointer; font-size: 0.85rem; font-family: 'Nunito', sans-serif;">Редагувати</button>
+                <button @click="handleToggle(book)" style="background: none; border: none; color: #fbbf24; cursor: pointer; font-size: 0.85rem; font-family: 'Nunito', sans-serif;">
                   {{ book.isActive ? 'Деактивувати' : 'Активувати' }}
                 </button>
-                <button @click="handleDelete(book._id)" class="text-red-500 hover:text-red-700 text-sm">Видалити</button>
+                <button @click="handleDelete(book._id)" style="background: none; border: none; color: #f87171; cursor: pointer; font-size: 0.85rem; font-family: 'Nunito', sans-serif;">Видалити</button>
               </div>
             </td>
           </tr>

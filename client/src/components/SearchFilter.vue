@@ -1,36 +1,87 @@
 <template>
-  <div class="flex flex-wrap gap-3">
+  <div style="display: flex; flex-wrap: wrap; gap: 12px;">
     <input
       :value="modelValue.search"
       @input="update('search', $event.target.value)"
       type="text"
       placeholder="Пошук за назвою..."
-      class="border rounded-lg px-4 py-2 flex-1 min-w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      style="
+        flex: 1; min-width: 200px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        padding: 10px 16px;
+        color: var(--text-primary);
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+      "
+      @focus="e => e.target.style.borderColor = 'var(--accent)'"
+      @blur="e => e.target.style.borderColor = 'var(--border-subtle)'"
     />
 
     <select
       :value="modelValue.category"
       @change="update('category', $event.target.value)"
-      class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      style="
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        padding: 10px 16px;
+        color: var(--text-primary);
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+      "
+      @focus="e => e.target.style.borderColor = 'var(--accent)'"
+      @blur="e => e.target.style.borderColor = 'var(--border-subtle)'"
     >
-      <option value="">Всі категорії</option>
-      <option v-for="c in categories" :key="c._id" :value="c._id">{{ c.name }}</option>
+      <option value="" style="background: var(--bg-elevated);">Всі категорії</option>
+      <option v-for="c in categories" :key="c._id" :value="c._id" style="background: var(--bg-elevated);">
+        {{ c.name }}
+      </option>
     </select>
 
     <select
       :value="modelValue.author"
       @change="update('author', $event.target.value)"
-      class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      style="
+        background: var(--bg-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 10px;
+        padding: 10px 16px;
+        color: var(--text-primary);
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+      "
+      @focus="e => e.target.style.borderColor = 'var(--accent)'"
+      @blur="e => e.target.style.borderColor = 'var(--border-subtle)'"
     >
-      <option value="">Всі автори</option>
-      <option v-for="a in authors" :key="a._id" :value="a._id">
+      <option value="" style="background: var(--bg-elevated);">Всі автори</option>
+      <option v-for="a in authors" :key="a._id" :value="a._id" style="background: var(--bg-elevated);">
         {{ a.firstName }} {{ a.lastName }}
       </option>
     </select>
 
     <button
       @click="reset"
-      class="border rounded-lg px-4 py-2 text-gray-600 hover:bg-gray-100"
+      style="
+        background: var(--bg-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      "
+      @mouseover="e => e.target.style.borderColor = 'var(--border)'"
+      @mouseleave="e => e.target.style.borderColor = 'var(--border-subtle)'"
     >
       Скинути фільтри
     </button>

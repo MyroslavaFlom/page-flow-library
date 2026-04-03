@@ -1,31 +1,70 @@
 <template>
-  <nav class="bg-white shadow-sm border-b">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-      <RouterLink to="/" class="text-xl font-bold text-blue-600">
-        Бібліотека
+  <nav style="
+    background: rgba(22, 22, 42, 0.85);
+    border-bottom: 1px solid var(--border-subtle);
+    backdrop-filter: blur(12px);
+    position: sticky; top: 0; z-index: 50;
+  ">
+    <div style="max-width: 1280px;" class="mx-auto px-6 py-4 flex items-center justify-between">
+
+      <RouterLink to="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+        <div style="
+          width: 32px; height: 32px;
+          background: var(--accent);
+          border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 16px;
+        ">📖</div>
+        <span style="
+          font-family: 'Nunito', sans-serif;
+          font-size: 1.3rem;
+          color: var(--text-primary);
+          font-weight: 700;
+        ">Page Flow</span>
       </RouterLink>
 
-      <div class="flex items-center gap-6">
-        <RouterLink to="/books" class="text-gray-600 hover:text-blue-600">
-          Книги
+      <div style="display: flex; align-items: center; gap: 32px;">
+        <RouterLink to="/books" style="color: var(--text-secondary); font-size: 0.95rem; transition: color 0.2s;"
+          @mouseover="e => e.target.style.color = 'var(--text-primary)'"
+          @mouseleave="e => e.target.style.color = 'var(--text-secondary)'">
+          Каталог
         </RouterLink>
 
-        <template v-if="authStore.isAdmin">
-          <RouterLink to="/admin/books" class="text-gray-600 hover:text-blue-600">
-            Адмін
-          </RouterLink>
-        </template>
+        <RouterLink v-if="authStore.isAdmin" to="/admin/books"
+          style="color: var(--text-secondary); font-size: 0.95rem; transition: color 0.2s;"
+          @mouseover="e => e.target.style.color = 'var(--text-primary)'"
+          @mouseleave="e => e.target.style.color = 'var(--text-secondary)'">
+          Адмін
+        </RouterLink>
 
         <template v-if="authStore.isLoggedIn">
-          <span class="text-gray-500 text-sm">{{ authStore.user?.firstName }}</span>
-          <button @click="handleLogout" class="text-red-500 hover:text-red-700 text-sm">
-            Вийти
-          </button>
+          <span style="color: var(--text-muted); font-size: 0.9rem;">
+            {{ authStore.user?.firstName }}
+          </span>
+          <button @click="handleLogout" style="
+            color: #f87171;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-family: 'Nunito', sans-serif;
+            transition: color 0.2s;
+          ">Вийти</button>
         </template>
         <template v-else>
-          <RouterLink to="/login" class="text-gray-600 hover:text-blue-600">Вхід</RouterLink>
-          <RouterLink to="/register"
-            class="bg-blue-600 text-white px-4 py-1.5 rounded-lg hover:bg-blue-700 text-sm">
+          <RouterLink to="/login" style="color: var(--text-secondary); font-size: 0.95rem;">
+            Вхід
+          </RouterLink>
+          <RouterLink to="/register" style="
+            background: var(--accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+          "
+          @mouseover="e => e.target.style.background = 'var(--accent-hover)'"
+          @mouseleave="e => e.target.style.background = 'var(--accent)'">
             Реєстрація
           </RouterLink>
         </template>
@@ -37,10 +76,8 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth.store'
 import { useRouter } from 'vue-router'
-
 const authStore = useAuthStore()
 const router = useRouter()
-
 function handleLogout() {
   authStore.logout()
   router.push('/login')

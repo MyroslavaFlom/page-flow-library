@@ -1,59 +1,107 @@
 <template>
-  <div class="max-w-md mx-auto mt-16 bg-white rounded-xl shadow p-8">
-    <h1 class="text-2xl font-bold text-center mb-6">Реєстрація</h1>
+  <div style="
+    min-height: 80vh;
+    display: flex; align-items: center; justify-content: center;
+  ">
+    <div style="
+      width: 100%; max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+    ">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <div style="
+          width: 48px; height: 48px;
+          background: var(--accent-soft);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          display: flex; align-items: center; justify-content: center;
+          margin: 0 auto 16px;
+          font-size: 22px;
+        ">📖</div>
+        <h1 style="font-size: 1.8rem; color: var(--text-primary); margin-bottom: 6px;">
+          Реєстрація в Page Flow
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Створіть акаунт щоб отримати доступ
+        </p>
+      </div>
 
-    <div v-if="success" class="text-center text-green-600">
-      <p class="text-lg font-medium">Реєстрація успішна!</p>
-      <p class="mt-2 text-sm text-gray-600">
-        Перевірте email <strong>{{ form.email }}</strong> та натисніть посилання для підтвердження.
+      <!-- Success -->
+      <div v-if="success" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">✓</div>
+        <p style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">
+          Реєстрація успішна!
+        </p>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+          Перевірте email <span style="color: var(--accent-hover); font-weight: 500;">{{ form.email }}</span>
+          та натисніть посилання для підтвердження.
+        </p>
+      </div>
+
+      <!-- Form -->
+      <div v-else style="display: flex; flex-direction: column; gap: 16px;">
+        <div v-for="field in fields" :key="field.key">
+          <label style="display: block; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 6px;">
+            {{ field.label }}
+          </label>
+          <input
+            v-model="form[field.key]"
+            :type="field.type || 'text'"
+            :placeholder="field.placeholder"
+            style="
+              width: 100%;
+              background: var(--bg-elevated);
+              border: 1px solid var(--border-subtle);
+              border-radius: 10px;
+              padding: 12px 16px;
+              color: var(--text-primary);
+              font-size: 0.95rem;
+              font-family: 'Nunito', sans-serif;
+              outline: none;
+              transition: border-color 0.2s;
+            "
+            @focus="e => e.target.style.borderColor = 'var(--accent)'"
+            @blur="e => e.target.style.borderColor = 'var(--border-subtle)'"
+          />
+        </div>
+
+        <div v-if="error" style="
+          background: rgba(239,68,68,0.1);
+          border: 1px solid rgba(239,68,68,0.3);
+          color: #fca5a5;
+          padding: 10px 14px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+        ">{{ error }}</div>
+
+        <button @click="handleSubmit" :disabled="loading" style="
+          width: 100%;
+          background: var(--accent);
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 13px;
+          font-size: 1rem;
+          font-family: 'Nunito', sans-serif;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          margin-top: 4px;
+        "
+        @mouseover="e => !loading && (e.target.style.background = 'var(--accent-hover)')"
+        @mouseleave="e => e.target.style.background = 'var(--accent)'">
+          {{ loading ? 'Реєстрація...' : 'Зареєструватись' }}
+        </button>
+      </div>
+
+      <p style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.9rem;">
+        Вже є акаунт?
+        <RouterLink to="/login" style="color: var(--accent-hover); margin-left: 4px;">Увійти</RouterLink>
       </p>
     </div>
-
-    <form v-else @submit.prevent="handleSubmit" class="flex flex-col gap-4">
-      <input
-        v-model="form.firstName"
-        placeholder="Ім'я"
-        class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        v-model="form.lastName"
-        placeholder="Прізвище"
-        class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="Email"
-        class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        v-model="form.password"
-        type="password"
-        placeholder="Пароль (мінімум 6 символів)"
-        class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        v-model="form.passwordConfirm"
-        type="password"
-        placeholder="Повторіть пароль"
-        class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-
-      <p v-if="error" class="text-red-500 text-sm mt-1">{{ error }}</p>
-
-      <button
-        type="submit"
-        :disabled="loading"
-        class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-      >
-        {{ loading ? 'Завантаження...' : 'Зареєструватись' }}
-      </button>
-    </form>
-
-    <p class="text-center text-sm text-gray-500 mt-4">
-      Вже є акаунт?
-      <RouterLink to="/login" class="text-blue-600 hover:underline">Увійти</RouterLink>
-    </p>
   </div>
 </template>
 
@@ -65,6 +113,14 @@ const form = ref({ firstName: '', lastName: '', email: '', password: '', passwor
 const error = ref('')
 const loading = ref(false)
 const success = ref(false)
+
+const fields = [
+  { key: 'firstName', label: "Ім'я", placeholder: "Ваше ім'я" },
+  { key: 'lastName', label: 'Прізвище', placeholder: 'Ваше прізвище' },
+  { key: 'email', label: 'Email', type: 'email', placeholder: 'your@email.com' },
+  { key: 'password', label: 'Пароль', type: 'password', placeholder: '•••••••• (мінімум 6 символів)' },
+  { key: 'passwordConfirm', label: 'Повторіть пароль', type: 'password', placeholder: '••••••••' },
+]
 
 async function handleSubmit() {
   error.value = ''

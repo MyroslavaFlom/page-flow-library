@@ -1,22 +1,34 @@
 <template>
   <div>
-    <h1 class="text-3xl font-bold mb-6">Каталог книг</h1>
+    <div style="margin-bottom: 32px;">
+      <h1 style="font-size: 2.2rem; color: var(--text-primary); margin-bottom: 8px;">
+        Каталог книг
+      </h1>
+      <p style="color: var(--text-muted); font-size: 0.95rem;">
+        {{ booksStore.total }} книг у колекції
+      </p>
+    </div>
 
-    <SearchFilter v-model="filters" class="mb-6" />
+    <SearchFilter v-model="filters" style="margin-bottom: 24px;" />
 
-    <div v-if="booksStore.lastUpdated" class="text-xs text-gray-400 text-right mb-2">
+    <div v-if="booksStore.lastUpdated" style="
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    ">
       Оновлено: {{ booksStore.lastUpdated }}
     </div>
 
-    <div v-if="booksStore.loading" class="text-center py-12 text-gray-400">
+    <div v-if="booksStore.loading" style="text-align: center; padding: 48px 0; color: var(--text-muted);">
       Завантаження...
     </div>
 
-    <div v-else-if="booksStore.books.length === 0" class="text-center py-12 text-gray-400">
+    <div v-else-if="booksStore.books.length === 0" style="text-align: center; padding: 48px 0; color: var(--text-muted);">
       Книг не знайдено
     </div>
 
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div v-else style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
       <BookCard v-for="book in booksStore.books" :key="book._id" :book="book" />
     </div>
 
